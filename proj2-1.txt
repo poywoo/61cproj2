@@ -1,0 +1,18 @@
+Partner 1 Name: Poy Woo
+Partner 1 Login: cs61c-abg
+
+Partner 2 Name: Siddhanta Dange
+Partner 2 Login: cs61c-el
+
+1. For games that do not have a single solution, if we were to generate all the permutations of the blocks that satisfy the solution predicate and proceed normally, then for an n*n block, you will have (n*n-1)! starting solutions to search from. For example, if we have a 5x5 block with 25 positions, we have one block in the right position and 24! = 620448401733239439360000 permutations for all the blocks and therefore 24! solutions. Doing a search with so many solutions will be very expensive because it will be generating 2-4 more children for each solution, potentially causing you to run out of memory for large sized puzzles. After mapping and reducing every iteration, the run time will be, at best, (n*n)! * (n*n-1)!/2. 
+
+2. Rather than starting from a solution, we use the starting board configuration and we would generate only the children that are closer to the solution, incrementing the level for every child as we did before. When we reach a board that is equal to the solution board, we assign it level 0. Like before, we stop when there are no more new boards added to our list. This is better than the previous solution because we won't be generating boards that are identical to a grandparent. For example, in the previous algorithm, from the parent 
+'A B C -', 
+we can generate the child 
+'A B - C'
+and for that child, we generate 
+'A B C -' 
+again as a child of the child. 
+As a result, beginning from the starting board and working towards the solution would be better. 
+
+3. Because loop-free puzzles means states aren't reversible, rather than using a breadth first search to find a solution set, we should use a depth first search from the starting state. Given a start state and a solution state, we would traverse a tree depth-first and keep track of the sequence of moves to get to the solution state, rather than keeping track of distance to solution state. Whenever we encounter a dead-end state, we should have an identifier to tell us that it's a dead-end sequence rather than a solution-sequence. With H amount of holes, we have 2^H board configurations to search. 
